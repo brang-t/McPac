@@ -1,9 +1,10 @@
 package game.objects.tiles;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
+        import java.awt.geom.Ellipse2D;
 
-public class Dot extends Tile {
+public abstract class Dot extends Tile {
+
     protected final double radius;
 
     protected Dot(int x, int y, double radius) {
@@ -11,21 +12,7 @@ public class Dot extends Tile {
         this.radius = radius;
     }
 
-    public Dot(int x, int y) {
-        this(x, y, 0.125);
-    }
-
-    @Override
-    public void render(Graphics2D g, int tileSize) {
-        double centerXOnScreen = getCenterX() * tileSize;
-        double centerYOnScreen = getCenterY() * tileSize;
-        double radiusOnScreen = radius * tileSize;
-        double diameterOnScreen = radiusOnScreen * 2.0;
-
-        g.setColor(Color.WHITE);
-        g.fill(new Ellipse2D.Double(centerXOnScreen - radiusOnScreen, centerYOnScreen - radiusOnScreen, diameterOnScreen, diameterOnScreen));
-    }
-
+    // Player braucht das:
     public double getCenterX() {
         return x + 0.5;
     }
@@ -34,7 +21,28 @@ public class Dot extends Tile {
         return y + 0.5;
     }
 
+    // Player braucht das auch:
     public double getRadius() {
         return radius;
+    }
+
+    // Unterklassen bestimmen die Farbe:
+    protected abstract Color getColor();
+
+    @Override
+    public void render(Graphics2D g, int tileSize) {
+        double centerXOnScreen = getCenterX() * tileSize;
+        double centerYOnScreen = getCenterY() * tileSize;
+
+        double radiusOnScreen = radius * tileSize;
+        double diameterOnScreen = radiusOnScreen * 2.0;
+
+        g.setColor(getColor());
+        g.fill(new Ellipse2D.Double(
+                centerXOnScreen - radiusOnScreen,
+                centerYOnScreen - radiusOnScreen,
+                diameterOnScreen,
+                diameterOnScreen
+        ));
     }
 }
