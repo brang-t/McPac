@@ -27,21 +27,58 @@ public class GameMap extends GameObject {
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     };
 
+    private static final int[][] HBRS_MAP = {
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 2, 2, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2, 1, 0, 0, 1, 2, 1, 2, 2, 1, 2, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2, 1, 0, 0, 1, 2, 1, 2, 2, 1, 2, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2, 1, 0, 0, 1, 2, 1, 2, 2, 1, 2, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2, 1, 0, 0, 1, 2, 1, 2, 2, 1, 2, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 0, 0, 1, 2, 2, 3, 2, 2, 1, 0, 0, 1, 2, 1, 2, 2, 2, 2, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2, 1, 0, 0, 1, 2, 1, 2, 2, 2, 2, 1},
+            {1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 2, 2, 1, 1, 2, 2, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 1, 2, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 0, 0, 1, 2, 2, 3, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 1, 2, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1},
+            {1, 2, 1, 2, 2, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1},
+            {1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+    };
+
+
+
+    private static final int[][][] MAPS = {
+            DEFAULT_MAP,
+            HBRS_MAP
+            // später einfach mehr Maps hinzufügen
+    };
+
+
     private final int tileSize;
-
     private final Tile[][] tiles;
+    private final int mapIndex; // <- neu: welche der MAPS benutzen wir?
 
-    public GameMap(int tileSize) {
+
+    public GameMap(int tileSize, int mapIndex) {
         this.tileSize = tileSize;
-        tiles = new Tile[DEFAULT_MAP.length][DEFAULT_MAP[0].length];
+        this.mapIndex = mapIndex;
+
+        int[][] layout = MAPS[mapIndex];
+        tiles = new Tile[layout.length][layout[0].length];
+
         reset();
     }
 
 
     public void reset() {
+        int[][] layout = MAPS[mapIndex];
+
         for (int y = 0; y < getHeight(); y++) {
             for (int x = 0; x < getWidth(); x++) {
-                tiles[y][x] = switch (DEFAULT_MAP[y][x]) {
+                tiles[y][x] = switch (layout[y][x]) {
                     case 1 -> new Block(x, y);
                     case 2 -> new RegularDot(x, y);
                     case 3 -> new PowerDot(x, y);
@@ -50,6 +87,7 @@ public class GameMap extends GameObject {
             }
         }
     }
+
 
     @Override
     public void render(Graphics2D g, int tileSize) {

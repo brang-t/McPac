@@ -111,7 +111,7 @@ public abstract class Enemy extends Creature {
     protected int targetX;
     protected int targetY;
 
-    // ------- NEU: Zustände für Power-Mode -------
+    // Zustände für Power-Mode
     protected enum State {
         NORMAL,
         FRIGHTENED, // flieht, langsamer, kann gefressen werden
@@ -123,21 +123,20 @@ public abstract class Enemy extends Creature {
     protected final double normalSpeed;
     protected final double frightenedSpeed;
 
-    // Fixer Punkt zum Fliehen & Respawn (Startposition)
+    // Fixpunkt für Flucht / Respawn (Startposition)
     protected final double spawnX;
     protected final double spawnY;
 
     protected long respawnTimeMs;
-    // -------------------------------------------
 
-    public Enemy(Game game, Player player, double centerX, double centerY,
+    public Enemy(Game game, Player player,
+                 double centerX, double centerY,
                  double radius, double speed, Color color) {
         super(game, centerX, centerY, radius, speed, color);
         this.player = player;
         targetX = (int) centerX;
         targetY = (int) centerY;
 
-        // NEU: Geschwindigkeiten & Spawnpunkt merken
         this.normalSpeed = speed;
         this.frightenedSpeed = speed * 0.5; // z. B. halb so schnell
         this.spawnX = centerX;
@@ -169,19 +168,20 @@ public abstract class Enemy extends Creature {
         return null;
     }
 
+    // Zielberechnung im Normalzustand ist je nach Enemy-Typ unterschiedlich
     protected abstract void tickTarget();
 
     @Override
     public void tickPreferredDirection() {
         if (state == State.FRIGHTENED) {
-            // Im Angstzustand: Ziel ist der Spawnpunkt = "Flucht"
+            // Im Angstzustand: Ziel ist Spawnpunkt (Flucht)
             Node aim = shortestDirectionTo((int) spawnX, (int) spawnY);
             if (aim != null) {
                 preferredDirectionX = Integer.signum(aim.getX() - (int) centerX);
                 preferredDirectionY = Integer.signum(aim.getY() - (int) centerY);
             }
         } else {
-            // Normales Verhalten (Chasing / Cutting / Random)
+            // Normales Chasing/Random/Cutting-Target
             tickTarget();
 
             Node aim = shortestDirectionTo(targetX, targetY);
@@ -198,29 +198,33 @@ public abstract class Enemy extends Creature {
         double r = player.getRadius() + radius;
 
         if (dx * dx + dy * dy < r * r) {
-            if (game.isPowerModeActive() && state == State.FRIGHTENED) {
-                // Pacman darf Geist fressen
+            if (player.isPowerModeActive() && state == State.FRIGHTENED) {
+                // Pacman darf verängstigten Geist fressen
                 onEaten();
             } else if (state != State.EATEN) {
-                // Normal: Spieler verliert
+                // Normalfall: Spieler verliert (solange Geist nicht "tot")
                 game.lose();
             }
         }
     }
 
-    // ------- NEU: Verhalten in tick() abhängig vom State -------
-
     @Override
     public void tick() {
         if (state == State.EATEN) {
-            // solange "tot": nicht bewegen, nur auf Respawn warten
+            // solange "tot": nicht bewegen, auf Respawn warten
             if (System.currentTimeMillis() >= respawnTimeMs) {
                 // Respawn am Spawnpunkt
                 centerX = spawnX;
                 centerY = spawnY;
 
-                state = game.isPowerModeActive() ? State.FRIGHTENED : State.NORMAL;
-                speed = (state == State.FRIGHTENED) ? frightenedSpeed : normalSpeed;
+                // Falls PowerMode noch aktiv ist → gleich wieder FRIGHTENED
+                if (player.isPowerModeActive()) {
+                    state = State.FRIGHTENED;
+                    speed = frightenedSpeed;
+                } else {
+                    state = State.NORMAL;
+                    speed = normalSpeed;
+                }
             }
             return;
         }
@@ -229,8 +233,7 @@ public abstract class Enemy extends Creature {
         tickPlayerCollision();
     }
 
-    // ------- NEU: Power-Mode Hooks -------
-
+    // Wird vom Player aufgerufen, wenn PowerMode beginnt
     public void onPowerModeStart() {
         if (state == State.NORMAL) {
             state = State.FRIGHTENED;
@@ -238,12 +241,13 @@ public abstract class Enemy extends Creature {
         }
     }
 
+    // Wird vom Player aufgerufen, wenn PowerMode endet
     public void onPowerModeEnd() {
         if (state == State.FRIGHTENED) {
             state = State.NORMAL;
             speed = normalSpeed;
         }
-        // EATEN bleibt EATEN – Respawn wird über Timer gesteuert
+        // EATEN bleibt EATEN, Respawn läuft separat
     }
 
     protected void onEaten() {
@@ -258,8 +262,6 @@ public abstract class Enemy extends Creature {
         speed = normalSpeed;
     }
 
-    // ------------------------------------------------------------
-
     @Override
     public void render(Graphics2D g, int tileSize) {
         if (state == State.EATEN) {
@@ -272,7 +274,6 @@ public abstract class Enemy extends Creature {
         double radiusOnScreen = radius * tileSize;
         double sizeOnScreen = radiusOnScreen * 2.0;
 
-        // andere Farbe im FRIGHTENED-State
         if (state == State.FRIGHTENED) {
             g.setColor(Color.CYAN);
         } else {
@@ -283,11 +284,16 @@ public abstract class Enemy extends Creature {
                 centerXOnScreen - radiusOnScreen,
                 centerYOnScreen - radiusOnScreen,
                 sizeOnScreen,
-                sizeOnScreen
-        ));
+                sizeOnScreen));
 
-        renderEyes(g, centerXOnScreen, centerYOnScreen, radiusOnScreen,
-                targetX + 0.5, targetY + 0.5);
+        renderEyes(g,
+                centerXOnScreen,
+                centerYOnScreen,
+                radiusOnScreen,
+                targetX + 0.5,
+                targetY + 0.5);
     }
 }
+
+
 
