@@ -253,7 +253,7 @@ import game.objects.creatures.Player;
 import game.objects.creatures.enemy.ChasingEnemy;
 import game.objects.creatures.enemy.CuttingEnemy;
 import game.objects.creatures.enemy.Enemy;
-import game.objects.creatures.enemy.RandomEnemy;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -286,7 +286,6 @@ public class Game extends JFrame {
         enemies = new Enemy[]{
                 new ChasingEnemy(this, player, 12.5, 8.5, 0.375, 0.06, Color.RED),
                 new CuttingEnemy(this, player, 13.5, 8.5, 0.375, 0.065, Color.GREEN),
-                new RandomEnemy(this, player, 14.5, 8.5, 0.375, 0.07, Color.MAGENTA)
         };
 
         setSize(1096, 759);

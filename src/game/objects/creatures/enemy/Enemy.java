@@ -286,12 +286,11 @@ public abstract class Enemy extends Creature {
                 sizeOnScreen,
                 sizeOnScreen));
 
+
         renderEyes(g,
                 centerXOnScreen,
                 centerYOnScreen,
-                radiusOnScreen,
-                targetX + 0.5,
-                targetY + 0.5);
+                radiusOnScreen);
     }
 }
 

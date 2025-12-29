@@ -380,25 +380,11 @@ public class Player extends Creature implements KeyListener {
                 diameterOnScreen));
 
         // Eyes
-        Enemy closestEnemy = null;
-        double closestSqDistance = Double.MAX_VALUE;
-        for (Enemy enemy : game.getEnemies()) {
-            double difX = enemy.centerX - centerX;
-            double difY = enemy.centerY - centerY;
-            double sqDistance = difX * difX + difY * difY;
-            if (sqDistance < closestSqDistance) {
-                closestEnemy = enemy;
-                closestSqDistance = sqDistance;
-            }
-        }
-        if (closestEnemy != null) {
-            renderEyes(g,
-                    centerXOnScreen,
-                    centerYOnScreen,
-                    radiusOnScreen,
-                    closestEnemy.centerX,
-                    closestEnemy.centerY);
-        }
+        renderEyes(g,
+                centerXOnScreen,
+                centerYOnScreen,
+                radiusOnScreen);
+
     }
 
     @Override
@@ -409,19 +395,19 @@ public class Player extends Creature implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W -> {
+            case KeyEvent.VK_UP -> {
                 preferredDirectionX = 0;
                 preferredDirectionY = -1;
             }
-            case KeyEvent.VK_A -> {
+            case KeyEvent.VK_LEFT -> {
                 preferredDirectionX = -1;
                 preferredDirectionY = 0;
             }
-            case KeyEvent.VK_S -> {
+            case KeyEvent.VK_DOWN -> {
                 preferredDirectionX = 0;
                 preferredDirectionY = 1;
             }
-            case KeyEvent.VK_D -> {
+            case KeyEvent.VK_RIGHT -> {
                 preferredDirectionX = 1;
                 preferredDirectionY = 0;
             }

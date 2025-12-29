@@ -272,7 +272,7 @@ public abstract class Creature extends GameObject {
         tickWallCollisions();
     }
 
-    protected void renderEyes(Graphics2D g, double centerXOnScreen, double centerYOnScreen, double radiusOnScreen, double aimX, double aimY) {
+    protected void renderEyes(Graphics2D g, double centerXOnScreen, double centerYOnScreen, double radiusOnScreen) {
         double eyeRad = radiusOnScreen / 3.0;
         double eyeCenterY = centerYOnScreen - radiusOnScreen / 3.0;
         double leftEyeCenterX = centerXOnScreen - radiusOnScreen / 2.0;
@@ -282,19 +282,12 @@ public abstract class Creature extends GameObject {
         g.fill(new Ellipse2D.Double(leftEyeCenterX - eyeRad, eyeCenterY - eyeRad, eyeRad * 2.0, eyeRad * 2.0));
         g.fill(new Ellipse2D.Double(rightEyeCenterX - eyeRad, eyeCenterY - eyeRad, eyeRad * 2.0, eyeRad * 2.0));
 
-        double dx = aimX - centerX;
-        double dy = aimY - centerY;
-        double length = Math.sqrt(dx * dx + dy * dy);
-        if (length > 0) {
-            dx /= length;
-            dy /= length;
-        }
-
-        double pupilY = eyeCenterY - eyeRad / 2.0 + dy * 0.4 * eyeRad;
+        double pupilY = eyeCenterY - eyeRad / 2.0;
 
         g.setColor(Color.BLACK);
-        g.fill(new Ellipse2D.Double(leftEyeCenterX + dx * 0.4 * eyeRad - eyeRad / 2.0, pupilY, eyeRad, eyeRad));
-        g.fill(new Ellipse2D.Double(rightEyeCenterX + dx * 0.4 * eyeRad - eyeRad / 2.0, pupilY, eyeRad, eyeRad));
+        g.fill(new Ellipse2D.Double(leftEyeCenterX +  0.8 - eyeRad / 2.0, pupilY, eyeRad, eyeRad));
+        g.fill(new Ellipse2D.Double(rightEyeCenterX +  0.8 - eyeRad / 2.0, pupilY, eyeRad, eyeRad));
+
     }
 
     public double getCenterX() {
