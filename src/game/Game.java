@@ -326,8 +326,9 @@ public class Game extends JFrame {
 
     private int chooseMap() {
         String[] options = {
-                "Karte 1 – Klassisch",
-                "Karte 2 – Hochschule Bonn-Rhein-Sieg Special"
+                "Karte 3 - Hochschule Bonn-Rhein-Sieg Special",
+                "Karte 2 – Embedded Systems Special",
+                "Karte 1 – Klassisch"
                 // später einfach mehr hinzufügen
         };
 
@@ -337,7 +338,7 @@ public class Game extends JFrame {
                 "Kartenwahl",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
-                null,
+                new ImageIcon("src/img/PAC_Man_Sprite.png"),
                 options,
                 options[0]
         );
@@ -385,7 +386,7 @@ public class Game extends JFrame {
         return enemies;
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         new Game();
     }
 
