@@ -12,6 +12,6 @@ public class PowerDot extends Dot {
 
     @Override
     protected Color getColor() {
-        return Color.RED;
+        return Color.WHITE;
     }
 }

@@ -12,6 +12,6 @@ public class RegularDot extends Dot {
 
     @Override
     protected Color getColor() {
-        return Color.WHITE;
+        return Color.LIGHT_GRAY;
     }
 }
