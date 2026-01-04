@@ -270,8 +270,12 @@ public class Game extends JFrame {
 
     private final Enemy[] enemies;
 
+    ImageIcon icon = new ImageIcon("src/img/Game_Logo_hbrs.png");
+
     public Game() {
         super("Game");
+
+
 
         // 1) Karte auswählen, bevor Map/Player/Enemies angelegt werden
         // 1) Karte wählen
@@ -321,7 +325,13 @@ public class Game extends JFrame {
     }
 
     public void lose() {
-        JOptionPane.showMessageDialog(null, "Game Over!");
+        JOptionPane.showMessageDialog(
+                null,
+                "Game Over!",
+                "You Lost!",
+                JOptionPane.PLAIN_MESSAGE,
+                icon
+        );
         reset();
     }
 
@@ -339,7 +349,7 @@ public class Game extends JFrame {
                 "Kartenwahl",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
-                new ImageIcon("src/img/PAC_Man_Sprite.png"),
+                icon,
                 options,
                 options[0]
         );
