@@ -75,9 +75,9 @@ public class GameMap extends GameObject {
 
 
     private static final int[][][] MAPS = {
-            DEFAULT_MAP,
+            HBRS_MAP_OLD,
             HBRS_MAP,
-            HBRS_MAP_OLD
+            DEFAULT_MAP
             // später einfach mehr Maps hinzufügen
     };
 
