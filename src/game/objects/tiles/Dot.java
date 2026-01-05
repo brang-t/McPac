@@ -12,7 +12,7 @@ public abstract class Dot extends Tile {
         this.radius = radius;
     }
 
-    // Player braucht das:
+    // Pacman braucht das:
     public double getCenterX() {
         return x + 0.5;
     }
@@ -21,7 +21,7 @@ public abstract class Dot extends Tile {
         return y + 0.5;
     }
 
-    // Player braucht das auch:
+    // Pacman braucht das auch:
     public double getRadius() {
         return radius;
     }

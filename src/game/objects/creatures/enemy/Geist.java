@@ -1,8 +1,8 @@
-/* package game.objects.creatures.enemy;
+/* package spiel.objects.creatures.enemy;
 
-import game.Game;
-import game.objects.creatures.Creature;
-import game.objects.creatures.Player;
+import spiel.Spiel;
+import spiel.objects.creatures.Kreatur;
+import spiel.objects.creatures.Pacman;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -11,15 +11,15 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
-public abstract class Enemy extends Creature {
-    protected Player player;
+public abstract class Geist extends Kreatur {
+    protected Pacman pacman;
 
     protected int targetX;
     protected int targetY;
 
-    public Enemy(Game game, Player player, double centerX, double centerY, double radius, double speed, Color color) {
-        super(game, centerX, centerY, radius, speed, color);
-        this.player = player;
+    public Geist(Spiel spiel, Pacman pacman, double centerX, double centerY, double radius, double speed, Color color) {
+        super(spiel, centerX, centerY, radius, speed, color);
+        this.pacman = pacman;
         targetX = (int) centerX;
         targetY = (int) centerY;
     }
@@ -43,7 +43,7 @@ public abstract class Enemy extends Creature {
             }
 
             visited.add(currentNode);
-            queue.addAll(currentNode.neighbors(game.getMap(), goalX, goalY));
+            queue.addAll(currentNode.neighbors(spiel.getMap(), goalX, goalY));
         }
 
         return null;
@@ -63,12 +63,12 @@ public abstract class Enemy extends Creature {
     }
 
     private void tickPlayerCollision() {
-        double dx = player.getCenterX() - centerX;
-        double dy = player.getCenterY() - centerY;
-        double r = player.getRadius() + radius;
+        double dx = pacman.getCenterX() - centerX;
+        double dy = pacman.getCenterY() - centerY;
+        double r = pacman.getRadius() + radius;
 
         if (dx * dx + dy * dy < r * r) {
-            game.lose();
+            spiel.lose();
         }
     }
 
@@ -94,9 +94,9 @@ public abstract class Enemy extends Creature {
 
 package game.objects.creatures.enemy;
 
-import game.Game;
-import game.objects.creatures.Creature;
-import game.objects.creatures.Player;
+import game.Spiel;
+import game.objects.creatures.Kreatur;
+import game.objects.creatures.Pacman;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -105,8 +105,8 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
-public abstract class Enemy extends Creature {
-    protected Player player;
+public abstract class Geist extends Kreatur {
+    protected Pacman pacman;
 
     protected int targetX;
     protected int targetY;
@@ -129,11 +129,11 @@ public abstract class Enemy extends Creature {
 
     protected long respawnTimeMs;
 
-    public Enemy(Game game, Player player,
+    public Geist(Spiel spiel, Pacman pacman,
                  double centerX, double centerY,
                  double radius, double speed, Color color) {
-        super(game, centerX, centerY, radius, speed, color);
-        this.player = player;
+        super(spiel, centerX, centerY, radius, speed, color);
+        this.pacman = pacman;
         targetX = (int) centerX;
         targetY = (int) centerY;
 
@@ -162,13 +162,13 @@ public abstract class Enemy extends Creature {
             }
 
             visited.add(currentNode);
-            queue.addAll(currentNode.neighbors(game.getMap(), goalX, goalY));
+            queue.addAll(currentNode.neighbors(spiel.getMap(), goalX, goalY));
         }
 
         return null;
     }
 
-    // Zielberechnung im Normalzustand ist je nach Enemy-Typ unterschiedlich
+    // Zielberechnung im Normalzustand ist je nach Geist-Typ unterschiedlich
     protected abstract void tickTarget();
 
     @Override
@@ -193,17 +193,17 @@ public abstract class Enemy extends Creature {
     }
 
     private void tickPlayerCollision() {
-        double dx = player.getCenterX() - centerX;
-        double dy = player.getCenterY() - centerY;
-        double r = player.getRadius() + radius;
+        double dx = pacman.getCenterX() - centerX;
+        double dy = pacman.getCenterY() - centerY;
+        double r = pacman.getRadius() + radius;
 
         if (dx * dx + dy * dy < r * r) {
-            if (player.isPowerModeActive() && state == State.FRIGHTENED) {
+            if (pacman.isPowerModeActive() && state == State.FRIGHTENED) {
                 // Pacman darf verängstigten Geist fressen
                 onEaten();
             } else if (state != State.EATEN) {
                 // Normalfall: Spieler verliert (solange Geist nicht "tot")
-                game.lose();
+                spiel.lose();
             }
         }
     }
@@ -218,7 +218,7 @@ public abstract class Enemy extends Creature {
                 centerY = spawnY;
 
                 // Falls PowerMode noch aktiv ist → gleich wieder FRIGHTENED
-                if (player.isPowerModeActive()) {
+                if (pacman.isPowerModeActive()) {
                     state = State.FRIGHTENED;
                     speed = frightenedSpeed;
                 } else {
@@ -233,7 +233,7 @@ public abstract class Enemy extends Creature {
         tickPlayerCollision();
     }
 
-    // Wird vom Player aufgerufen, wenn PowerMode beginnt
+    // Wird vom Pacman aufgerufen, wenn PowerMode beginnt
     public void onPowerModeStart() {
         if (state == State.NORMAL) {
             state = State.FRIGHTENED;
@@ -241,7 +241,7 @@ public abstract class Enemy extends Creature {
         }
     }
 
-    // Wird vom Player aufgerufen, wenn PowerMode endet
+    // Wird vom Pacman aufgerufen, wenn PowerMode endet
     public void onPowerModeEnd() {
         if (state == State.FRIGHTENED) {
             state = State.NORMAL;

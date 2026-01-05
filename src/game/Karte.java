@@ -1,11 +1,11 @@
 package game;
 
-import game.objects.GameObject;
+import game.objects.Spielobjekt;
 import game.objects.tiles.*;
 
 import java.awt.*;
 
-public class GameMap extends GameObject {
+public class Karte extends Spielobjekt {
     private static final int[][] DEFAULT_MAP = {
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
             {1, 3, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 3, 1},
@@ -87,7 +87,7 @@ public class GameMap extends GameObject {
     private final int mapIndex; // <- neu: welche der MAPS benutzen wir?
 
 
-    public GameMap(int tileSize, int mapIndex) {
+    public Karte(int tileSize, int mapIndex) {
         this.tileSize = tileSize;
         this.mapIndex = mapIndex;
 
@@ -104,10 +104,10 @@ public class GameMap extends GameObject {
         for (int y = 0; y < getHeight(); y++) {
             for (int x = 0; x < getWidth(); x++) {
                 tiles[y][x] = switch (layout[y][x]) {
-                    case 1 -> new Block(x, y);
+                    case 1 -> new Wand(x, y);
                     case 2 -> new RegularDot(x, y);
                     case 3 -> new PowerDot(x, y);
-                    default -> new Air(x, y);
+                    default -> new Luft(x, y);
                 };
             }
         }
@@ -140,7 +140,7 @@ public class GameMap extends GameObject {
             return false;
         }
 
-        return !(tiles[y][x] instanceof Block);
+        return !(tiles[y][x] instanceof Wand);
     }
 
     public int getWidth() {

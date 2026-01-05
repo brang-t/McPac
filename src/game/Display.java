@@ -4,12 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Display extends JPanel {
-    private final Game game;
+    private final Spiel spiel;
 
-    public Display(Game game) {
+    public Display(Spiel spiel) {
         super();
-        this.game = game;
-        game.add(this);
+        this.spiel = spiel;
+        spiel.add(this);
     }
 
     @Override
@@ -20,6 +20,6 @@ public class Display extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
         g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-        game.render(g2);
+        spiel.render(g2);
     }
 }

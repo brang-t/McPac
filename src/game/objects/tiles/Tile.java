@@ -1,8 +1,8 @@
 package game.objects.tiles;
 
-import game.objects.GameObject;
+import game.objects.Spielobjekt;
 
-public abstract class Tile extends GameObject {
+public abstract class Tile extends Spielobjekt {
     protected final int x;
     protected final int y;
 

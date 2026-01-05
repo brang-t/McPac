@@ -1,6 +1,6 @@
 package game.objects.creatures.enemy;
 
-import game.GameMap;
+import game.Karte;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class Node implements Comparable<Node> {
         minDistanceToGoal = Math.abs(goalX - x) + Math.abs(goalY - y);
     }
 
-    public List<Node> neighbors(GameMap map, int goalX, int goalY) {
+    public List<Node> neighbors(Karte map, int goalX, int goalY) {
         List<Node> neighbors = new ArrayList<>();
 
         if (map.isFree(x - 1, y)) {

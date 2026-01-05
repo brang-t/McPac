@@ -1,37 +1,37 @@
-/*package game;
+/*package spiel;
 
-import game.objects.creatures.Player;
-import game.objects.creatures.enemy.ChasingEnemy;
-import game.objects.creatures.enemy.CuttingEnemy;
-import game.objects.creatures.enemy.Enemy;
-import game.objects.creatures.enemy.RandomEnemy;
+import spiel.objects.creatures.Pacman;
+import spiel.objects.creatures.enemy.VerfolgerGeist;
+import spiel.objects.creatures.enemy.CuttingGeist;
+import spiel.objects.creatures.enemy.Geist;
+import spiel.objects.creatures.enemy.RandomGeist;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class Game extends JFrame {
+public class Spiel extends JFrame {
     private final Display display;
-    private final GameMap map;
-    private final Player player;
+    private final Karte map;
+    private final Pacman pacman;
 
     private boolean won;
 
-    private final Enemy[] enemies;
+    private final Geist[] enemies;
 
-    public Game() {
-        super("Game");
+    public Spiel() {
+        super("Spiel");
 
         display = new Display(this);
-        map = new GameMap(40);
-        player = new Player(this, 13.5, 10.5, 0.375, 0.07);
-        addKeyListener(player);
+        map = new Karte(40);
+        pacman = new Pacman(this, 13.5, 10.5, 0.375, 0.07);
+        addKeyListener(pacman);
 
-        enemies = new Enemy[]{
-                new ChasingEnemy(this, player, 12.5, 8.5, 0.375, 0.06, Color.RED),
-                new CuttingEnemy(this, player, 13.5, 8.5, 0.375, 0.065, Color.GREEN),
-                new RandomEnemy(this, player, 14.5, 8.5, 0.375, 0.07, Color.MAGENTA)
+        enemies = new Geist[]{
+                new VerfolgerGeist(this, pacman, 12.5, 8.5, 0.375, 0.06, Color.RED),
+                new CuttingGeist(this, pacman, 13.5, 8.5, 0.375, 0.065, Color.GREEN),
+                new RandomGeist(this, pacman, 14.5, 8.5, 0.375, 0.07, Color.MAGENTA)
         };
 
         setSize(1096, 759);
@@ -53,8 +53,8 @@ public class Game extends JFrame {
     private void reset() {
         won = false;
         map.reset();
-        player.reset();
-        for (Enemy enemy : enemies) {
+        pacman.reset();
+        for (Geist enemy : enemies) {
             enemy.reset();
         }
     }
@@ -64,7 +64,7 @@ public class Game extends JFrame {
     }
 
     public void lose() {
-        JOptionPane.showMessageDialog(null, "Game Over!");
+        JOptionPane.showMessageDialog(null, "Spiel Over!");
         reset();
     }
 
@@ -73,8 +73,8 @@ public class Game extends JFrame {
             JOptionPane.showMessageDialog(null, "You Won!");
             reset();
         }
-        player.tick();
-        for (Enemy enemy : enemies) {
+        pacman.tick();
+        for (Geist enemy : enemies) {
             enemy.tick();
         }
     }
@@ -86,64 +86,64 @@ public class Game extends JFrame {
         int tileSize = map.getTileSize();
 
         map.render(g2, tileSize);
-        player.render(g2, tileSize);
-        for (Enemy enemy : enemies) {
+        pacman.render(g2, tileSize);
+        for (Geist enemy : enemies) {
             enemy.render(g2, tileSize);
         }
     }
 
-    public GameMap getMap() {
+    public Karte getMap() {
         return map;
     }
 
-    public Enemy[] getEnemies() {
+    public Geist[] getEnemies() {
         return enemies;
     }
 
     public static void main(String[] args) {
-        new Game();
+        new Spiel();
     }
 }*/
 
-/* package game;
+/* package spiel;
 
-import game.objects.creatures.Player;
-import game.objects.creatures.enemy.ChasingEnemy;
-import game.objects.creatures.enemy.CuttingEnemy;
-import game.objects.creatures.enemy.Enemy;
-import game.objects.creatures.enemy.RandomEnemy;
+import spiel.objects.creatures.Pacman;
+import spiel.objects.creatures.enemy.VerfolgerGeist;
+import spiel.objects.creatures.enemy.CuttingGeist;
+import spiel.objects.creatures.enemy.Geist;
+import spiel.objects.creatures.enemy.RandomGeist;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class Game extends JFrame {
+public class Spiel extends JFrame {
     private final Display display;
-    private final GameMap map;
-    private final Player player;
+    private final Karte map;
+    private final Pacman pacman;
 
     private boolean won;
 
-    private final Enemy[] enemies;
+    private final Geist[] enemies;
 
     // ------- NEU: Power-Mode-Zustand + Timer -------
     private boolean powerModeActive = false;
     private long powerModeEndTimeMs;
     // ------------------------------------------------
 
-    public Game() {
-        super("Game");
+    public Spiel() {
+        super("Spiel");
 
         display = new Display(this);
-        map = new GameMap(40);
-        player = new Player(this, 13.5, 10.5, 0.375, 0.07);
-        addKeyListener(player);
+        map = new Karte(40);
+        pacman = new Pacman(this, 13.5, 10.5, 0.375, 0.07);
+        addKeyListener(pacman);
 
-        enemies = new Enemy[]{
-                new ChasingEnemy(this, player, 12.5, 8.5, 0.375, 0.06, Color.RED),
-                new CuttingEnemy(this, player, 13.5, 8.5, 0.375, 0.065, Color.GREEN),
-                new RandomEnemy(this, player, 14.5, 8.5, 0.375, 0.07, Color.MAGENTA)
+        enemies = new Geist[]{
+                new VerfolgerGeist(this, pacman, 12.5, 8.5, 0.375, 0.06, Color.RED),
+                new CuttingGeist(this, pacman, 13.5, 8.5, 0.375, 0.065, Color.GREEN),
+                new RandomGeist(this, pacman, 14.5, 8.5, 0.375, 0.07, Color.MAGENTA)
         };
 
         setSize(1096, 759);
@@ -166,8 +166,8 @@ public class Game extends JFrame {
         won = false;
         powerModeActive = false; // Power-Mode zurücksetzen
         map.reset();
-        player.reset();
-        for (Enemy enemy : enemies) {
+        pacman.reset();
+        for (Geist enemy : enemies) {
             enemy.reset();
         }
     }
@@ -177,19 +177,19 @@ public class Game extends JFrame {
     }
 
     public void lose() {
-        JOptionPane.showMessageDialog(null, "Game Over!");
+        JOptionPane.showMessageDialog(null, "Spiel Over!");
         reset();
     }
 
     // ------- NEU: Power-Mode aktivieren / abfragen -------
 
-    // wird vom Player aufgerufen, wenn ein PowerDot gefressen wurde
+    // wird vom Pacman aufgerufen, wenn ein PowerDot gefressen wurde
     public void activatePowerMode() {
         powerModeActive = true;
         powerModeEndTimeMs = System.currentTimeMillis() + 5000; // 5 Sekunden Dauer
 
-        player.onPowerModeStart();
-        for (Enemy enemy : enemies) {
+        pacman.onPowerModeStart();
+        for (Geist enemy : enemies) {
             enemy.onPowerModeStart();
         }
     }
@@ -209,14 +209,14 @@ public class Game extends JFrame {
         // Ablauf des Power-Modes prüfen
         if (powerModeActive && System.currentTimeMillis() > powerModeEndTimeMs) {
             powerModeActive = false;
-            player.onPowerModeEnd();
-            for (Enemy enemy : enemies) {
+            pacman.onPowerModeEnd();
+            for (Geist enemy : enemies) {
                 enemy.onPowerModeEnd();
             }
         }
 
-        player.tick();
-        for (Enemy enemy : enemies) {
+        pacman.tick();
+        for (Geist enemy : enemies) {
             enemy.tick();
         }
     }
@@ -228,32 +228,31 @@ public class Game extends JFrame {
         int tileSize = map.getTileSize();
 
         map.render(g2, tileSize);
-        player.render(g2, tileSize);
-        for (Enemy enemy : enemies) {
+        pacman.render(g2, tileSize);
+        for (Geist enemy : enemies) {
             enemy.render(g2, tileSize);
         }
     }
 
-    public GameMap getMap() {
+    public Karte getMap() {
         return map;
     }
 
-    public Enemy[] getEnemies() {
+    public Geist[] getEnemies() {
         return enemies;
     }
 
     public static void main(String[] args) {
-        new Game();
+        new Spiel();
     }
 }
 */
 package game;
 
-import game.objects.creatures.Player;
-import game.objects.creatures.enemy.ChasingEnemy;
-import game.objects.creatures.enemy.CuttingEnemy;
-import game.objects.creatures.enemy.Enemy;
-import game.objects.creatures.enemy.RandomEnemy;
+import game.objects.creatures.Pacman;
+import game.objects.creatures.enemy.*;
+import game.objects.creatures.enemy.Geist;
+import game.objects.creatures.enemy.RandomGeist;
 
 
 import javax.swing.*;
@@ -261,36 +260,36 @@ import java.awt.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class Game extends JFrame {
+public class Spiel extends JFrame {
     private final Display display;
-    private final GameMap map;
-    private final Player player;
+    private final Karte map;
+    private final Pacman pacman;
 
     private boolean won;
 
-    private final Enemy[] enemies;
+    private final Geist[] enemies;
 
     ImageIcon icon = new ImageIcon("src/img/Game_Logo_hbrs.png");
 
-    public Game() {
-        super("Game");
+    public Spiel() {
+        super("Spiel");
 
 
 
-        // 1) Karte auswählen, bevor Map/Player/Enemies angelegt werden
+        // 1) Karte auswählen, bevor Map/Pacman/Enemies angelegt werden
         // 1) Karte wählen
 
         int selectedMapIndex = chooseMap();           // NEU: Auswahl beim Start
-        map = new GameMap(40, selectedMapIndex);      // NEU: mapIndex an GameMap
+        map = new Karte(40, selectedMapIndex);      // NEU: mapIndex an Karte
 
         display = new Display(this);
-        // map = new GameMap(40);
-        player = new Player(this, 13.5, 10.5, 0.375, 0.07);
-        addKeyListener(player);
+        // map = new Karte(40);
+        pacman = new Pacman(this, 13.5, 10.5, 0.375, 0.07);
+        addKeyListener(pacman);
 
-        enemies = new Enemy[]{
-                new ChasingEnemy(this, player, 12.5, 8.5, 0.375, 0.06, Color.RED),
-                new RandomEnemy(this, player, 13.5, 8.5, 0.375, 0.065, Color.GREEN),
+        enemies = new Geist[]{
+                new VerfolgerGeist(this, pacman, 12.5, 8.5, 0.375, 0.06, Color.RED),
+                new RandomGeist(this, pacman, 13.5, 8.5, 0.375, 0.065, Color.GREEN),
         };
 
         setSize(1096, 759);
@@ -314,9 +313,9 @@ public class Game extends JFrame {
     private void reset() {
         won = false;
         map.reset();
-        player.reset();
-        for (Enemy enemy : enemies) {
-            enemy.reset();
+        pacman.reset();
+        for (Geist geist : enemies) {
+            geist.reset();
         }
     }
 
@@ -327,7 +326,7 @@ public class Game extends JFrame {
     public void lose() {
         JOptionPane.showMessageDialog(
                 null,
-                "Game Over!",
+                "Spiel Over!",
                 "You Lost!",
                 JOptionPane.PLAIN_MESSAGE,
                 icon
@@ -369,10 +368,10 @@ public class Game extends JFrame {
             reset();
         }
 
-        // Game kennt den PowerMode nicht – nur Ticks durchreichen
-        player.tick();
-        for (Enemy enemy : enemies) {
-            enemy.tick();
+        // Spiel kennt den PowerMode nicht – nur Ticks durchreichen
+        pacman.tick();
+        for (Geist geist : enemies) {
+            geist.tick();
         }
     }
 
@@ -383,22 +382,22 @@ public class Game extends JFrame {
         int tileSize = map.getTileSize();
 
         map.render(g2, tileSize);
-        player.render(g2, tileSize);
-        for (Enemy enemy : enemies) {
-            enemy.render(g2, tileSize);
+        pacman.render(g2, tileSize);
+        for (Geist geist : enemies) {
+            geist.render(g2, tileSize);
         }
     }
 
-    public GameMap getMap() {
+    public Karte getMap() {
         return map;
     }
 
-    public Enemy[] getEnemies() {
+    public Geist[] getEnemies() {
         return enemies;
     }
 
     static void main(String[] args) {
-        new Game();
+        new Spiel();
     }
 
 }

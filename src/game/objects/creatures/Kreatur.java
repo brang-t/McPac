@@ -1,14 +1,14 @@
-/* package game.objects.creatures;
+/* package spiel.objects.creatures;
 
-import game.Game;
-import game.GameMap;
-import game.objects.GameObject;
+import spiel.Spiel;
+import spiel.Karte;
+import spiel.objects.Spielobjekt;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
-public abstract class Creature extends GameObject {
-    protected final Game game;
+public abstract class Kreatur extends Spielobjekt {
+    protected final Spiel spiel;
     protected double centerX;
     protected double centerY;
     protected final double radius;
@@ -23,8 +23,8 @@ public abstract class Creature extends GameObject {
     private final double initialX;
     private final double initialY;
 
-    public Creature(Game game, double centerX, double centerY, double radius, double speed, Color color) {
-        this.game = game;
+    public Kreatur(Spiel spiel, double centerX, double centerY, double radius, double speed, Color color) {
+        this.spiel = spiel;
         this.centerX = centerX;
         this.centerY = centerY;
         this.radius = radius;
@@ -67,7 +67,7 @@ public abstract class Creature extends GameObject {
     }
 
     private void tickWallCollisions() {
-        GameMap map = game.getMap();
+        Karte map = spiel.getMap();
 
         if (movingDirectionX == 1 && !map.isFree((int) (centerX + 0.5), (int) centerY)
                 || movingDirectionX == -1 && !map.isFree((int) (centerX - 0.5), (int) centerY)) {
@@ -81,8 +81,8 @@ public abstract class Creature extends GameObject {
     protected abstract void tickPreferredDirection();
 
     private void tickTurn(boolean crossedCenterX, boolean crossedCenterY) {
-        boolean turnXToY = crossedCenterX && movingDirectionX != 0 && preferredDirectionY != 0 && game.getMap().isFree((int) centerX, (int) (centerY + preferredDirectionY));
-        boolean turnYToX = crossedCenterY && movingDirectionY != 0 && preferredDirectionX != 0 && game.getMap().isFree((int) (centerX + preferredDirectionX), (int) centerY);
+        boolean turnXToY = crossedCenterX && movingDirectionX != 0 && preferredDirectionY != 0 && spiel.getMap().isFree((int) centerX, (int) (centerY + preferredDirectionY));
+        boolean turnYToX = crossedCenterY && movingDirectionY != 0 && preferredDirectionX != 0 && spiel.getMap().isFree((int) (centerX + preferredDirectionX), (int) centerY);
         if (turnXToY) {
             snapX();
             movingDirectionY = preferredDirectionY;
@@ -159,15 +159,15 @@ public abstract class Creature extends GameObject {
 
 package game.objects.creatures;
 
-import game.Game;
-import game.GameMap;
-import game.objects.GameObject;
+import game.Karte;
+import game.Spiel;
+import game.objects.Spielobjekt;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
-public abstract class Creature extends GameObject {
-    protected final Game game;
+public abstract class Kreatur extends Spielobjekt {
+    protected final Spiel spiel;
     protected double centerX;
     protected double centerY;
     protected final double radius;
@@ -183,8 +183,8 @@ public abstract class Creature extends GameObject {
     private final double initialY;
     private final double initialSpeed;   // <- neu: Startgeschwindigkeit merken
 
-    public Creature(Game game, double centerX, double centerY, double radius, double speed, Color color) {
-        this.game = game;
+    public Kreatur(Spiel spiel, double centerX, double centerY, double radius, double speed, Color color) {
+        this.spiel = spiel;
         this.centerX = centerX;
         this.centerY = centerY;
         this.radius = radius;
@@ -228,7 +228,7 @@ public abstract class Creature extends GameObject {
     }
 
     private void tickWallCollisions() {
-        GameMap map = game.getMap();
+        Karte map = spiel.getMap();
 
         if (movingDirectionX == 1 && !map.isFree((int) (centerX + 0.5), (int) centerY)
                 || movingDirectionX == -1 && !map.isFree((int) (centerX - 0.5), (int) centerY)) {
@@ -242,8 +242,8 @@ public abstract class Creature extends GameObject {
     protected abstract void tickPreferredDirection();
 
     private void tickTurn(boolean crossedCenterX, boolean crossedCenterY) {
-        boolean turnXToY = crossedCenterX && movingDirectionX != 0 && preferredDirectionY != 0 && game.getMap().isFree((int) centerX, (int) (centerY + preferredDirectionY));
-        boolean turnYToX = crossedCenterY && movingDirectionY != 0 && preferredDirectionX != 0 && game.getMap().isFree((int) (centerX + preferredDirectionX), (int) centerY);
+        boolean turnXToY = crossedCenterX && movingDirectionX != 0 && preferredDirectionY != 0 && spiel.getMap().isFree((int) centerX, (int) (centerY + preferredDirectionY));
+        boolean turnYToX = crossedCenterY && movingDirectionY != 0 && preferredDirectionX != 0 && spiel.getMap().isFree((int) (centerX + preferredDirectionX), (int) centerY);
         if (turnXToY) {
             snapX();
             movingDirectionY = preferredDirectionY;

@@ -1,33 +1,33 @@
-/* package game.objects.creatures;
+/* package spiel.objects.creatures;
 
-import game.Game;
-import game.objects.creatures.enemy.Enemy;
-import game.objects.tiles.Air;
-import game.objects.tiles.Dot;
+import spiel.Spiel;
+import spiel.objects.creatures.enemy.Geist;
+import spiel.objects.tiles.Luft;
+import spiel.objects.tiles.Dot;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Ellipse2D;
 
-public class Player extends Creature implements KeyListener {
-    public Player(Game game, double centerX, double centerY, double radius, double speed) {
-        super(game, centerX, centerY, radius, speed, Color.YELLOW);
+public class Pacman extends Kreatur implements KeyListener {
+    public Pacman(Spiel spiel, double centerX, double centerY, double radius, double speed) {
+        super(spiel, centerX, centerY, radius, speed, Color.YELLOW);
     }
 
     private void tickDotCollision() {
         int x = (int) centerX;
         int y = (int) centerY;
 
-        if (game.getMap().getTile(x, y) instanceof Dot dot) {
+        if (spiel.getMap().getTile(x, y) instanceof Dot dot) {
             double dx = dot.getCenterX() - centerX;
             double dy = dot.getCenterY() - centerY;
             double r = dot.getRadius() + radius;
 
             if (dx * dx + dy * dy < r * r) {
-                game.getMap().setTile(x, y, new Air(x, y));
-                if (game.getMap().dotCount() == 0) {
-                    game.win();
+                spiel.getMap().setTile(x, y, new Luft(x, y));
+                if (spiel.getMap().dotCount() == 0) {
+                    spiel.win();
                 }
             }
         }
@@ -35,7 +35,7 @@ public class Player extends Creature implements KeyListener {
 
     @Override
     protected void tickPreferredDirection() {
-        for (Enemy enemy : game.getEnemies()) {
+        for (Geist enemy : spiel.getEnemies()) {
             enemy.tickPreferredDirection();
         }
     }
@@ -57,9 +57,9 @@ public class Player extends Creature implements KeyListener {
         g.fill(new Ellipse2D.Double(centerXOnScreen - radiusOnScreen, centerYOnScreen - radiusOnScreen, diameterOnScreen, diameterOnScreen));
 
         // Eyes
-        Enemy closestEnemy = null;
+        Geist closestEnemy = null;
         double closestSqDistance = Double.MAX_VALUE;
-        for (Enemy enemy : game.getEnemies()) {
+        for (Geist enemy : spiel.getEnemies()) {
             double difX = enemy.centerX - centerX;
             double difY = enemy.centerY - centerY;
             double sqDistance = difX * difX + difY * difY;
@@ -104,20 +104,20 @@ public class Player extends Creature implements KeyListener {
     }
 }*/
 /*
-package game.objects.creatures;
+package spiel.objects.creatures;
 
-import game.Game;
-import game.objects.creatures.enemy.Enemy;
-import game.objects.tiles.Air;
-import game.objects.tiles.Dot;
-import game.objects.tiles.PowerDot;
+import spiel.Spiel;
+import spiel.objects.creatures.enemy.Geist;
+import spiel.objects.tiles.Luft;
+import spiel.objects.tiles.Dot;
+import spiel.objects.tiles.PowerDot;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Ellipse2D;
 
-public class Player extends Creature implements KeyListener {
+public class Pacman extends Kreatur implements KeyListener {
 
     // ------- NEU: Speed & Farben für Power-Mode -------
     private final double normalSpeed;
@@ -127,8 +127,8 @@ public class Player extends Creature implements KeyListener {
     private final Color powerColor = Color.ORANGE;
     // ---------------------------------------------------
 
-    public Player(Game game, double centerX, double centerY, double radius, double speed) {
-        super(game, centerX, centerY, radius, speed, Color.YELLOW);
+    public Pacman(Spiel spiel, double centerX, double centerY, double radius, double speed) {
+        super(spiel, centerX, centerY, radius, speed, Color.YELLOW);
         this.normalSpeed = speed;
         this.powerSpeed = speed * 1.5; // z. B. 50% schneller im Power-Mode
     }
@@ -137,23 +137,23 @@ public class Player extends Creature implements KeyListener {
         int x = (int) centerX;
         int y = (int) centerY;
 
-        if (game.getMap().getTile(x, y) instanceof Dot dot) {
+        if (spiel.getMap().getTile(x, y) instanceof Dot dot) {
             double dx = dot.getCenterX() - centerX;
             double dy = dot.getCenterY() - centerY;
             double r = dot.getRadius() + radius;
 
             if (dx * dx + dy * dy < r * r) {
                 // Punkt entfernen
-                game.getMap().setTile(x, y, new Air(x, y));
+                spiel.getMap().setTile(x, y, new Luft(x, y));
 
                 // NEU: Wenn PowerDot -> Power-Mode aktivieren
                 if (dot instanceof PowerDot) {
-                    game.activatePowerMode();
+                    spiel.activatePowerMode();
                 }
 
                 // Siegprüfung bleibt wie gehabt
-                if (game.getMap().dotCount() == 0) {
-                    game.win();
+                if (spiel.getMap().dotCount() == 0) {
+                    spiel.win();
                 }
             }
         }
@@ -162,7 +162,7 @@ public class Player extends Creature implements KeyListener {
     // Geister berechnen pro Tick ihre Preferred Directions
     @Override
     protected void tickPreferredDirection() {
-        for (Enemy enemy : game.getEnemies()) {
+        for (Geist enemy : spiel.getEnemies()) {
             enemy.tickPreferredDirection();
         }
     }
@@ -193,7 +193,7 @@ public class Player extends Creature implements KeyListener {
         double diameterOnScreen = radiusOnScreen * 2.0;
 
         // im Power-Mode andere Farbe
-        Color currentColor = game.isPowerModeActive() ? powerColor : normalColor;
+        Color currentColor = spiel.isPowerModeActive() ? powerColor : normalColor;
         g.setColor(currentColor);
         g.fill(new Ellipse2D.Double(centerXOnScreen - radiusOnScreen,
                 centerYOnScreen - radiusOnScreen,
@@ -201,9 +201,9 @@ public class Player extends Creature implements KeyListener {
                 diameterOnScreen));
 
         // Eyes
-        Enemy closestEnemy = null;
+        Geist closestEnemy = null;
         double closestSqDistance = Double.MAX_VALUE;
-        for (Enemy enemy : game.getEnemies()) {
+        for (Geist enemy : spiel.getEnemies()) {
             double difX = enemy.centerX - centerX;
             double difY = enemy.centerY - centerY;
             double sqDistance = difX * difX + difY * difY;
@@ -253,9 +253,9 @@ public class Player extends Creature implements KeyListener {
 
 package game.objects.creatures;
 
-import game.Game;
-import game.objects.creatures.enemy.Enemy;
-import game.objects.tiles.Air;
+import game.Spiel;
+import game.objects.creatures.enemy.Geist;
+import game.objects.tiles.Luft;
 import game.objects.tiles.Dot;
 import game.objects.tiles.PowerDot;
 
@@ -264,7 +264,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Ellipse2D;
 
-public class Player extends Creature implements KeyListener {
+public class Pacman extends Kreatur implements KeyListener {
 
     // PowerMode-Einstellungen
     private final double normalSpeed;
@@ -276,8 +276,8 @@ public class Player extends Creature implements KeyListener {
     private boolean powerModeActive = false;
     private long powerModeEndTimeMs;
 
-    public Player(Game game, double centerX, double centerY, double radius, double speed) {
-        super(game, centerX, centerY, radius, speed, Color.YELLOW);
+    public Pacman(Spiel spiel, double centerX, double centerY, double radius, double speed) {
+        super(spiel, centerX, centerY, radius, speed, Color.YELLOW);
         this.normalSpeed = speed;
         this.powerSpeed = speed * 1.5; // z. B. 50% schneller im PowerMode
     }
@@ -286,14 +286,14 @@ public class Player extends Creature implements KeyListener {
         int x = (int) centerX;
         int y = (int) centerY;
 
-        if (game.getMap().getTile(x, y) instanceof Dot dot) {
+        if (spiel.getMap().getTile(x, y) instanceof Dot dot) {
             double dx = dot.getCenterX() - centerX;
             double dy = dot.getCenterY() - centerY;
             double r = dot.getRadius() + radius;
 
             if (dx * dx + dy * dy < r * r) {
                 // Punkt entfernen
-                game.getMap().setTile(x, y, new Air(x, y));
+                spiel.getMap().setTile(x, y, new Luft(x, y));
 
                 // Wenn es ein PowerDot ist → PowerMode aktivieren
                 if (dot instanceof PowerDot) {
@@ -301,8 +301,8 @@ public class Player extends Creature implements KeyListener {
                 }
 
                 // Alle Dots weg? Dann gewonnen
-                if (game.getMap().dotCount() == 0) {
-                    game.win();
+                if (spiel.getMap().dotCount() == 0) {
+                    spiel.win();
                 }
             }
         }
@@ -318,12 +318,12 @@ public class Player extends Creature implements KeyListener {
         powerModeActive = true;
         powerModeEndTimeMs = System.currentTimeMillis() + 5000; // 5 Sekunden
 
-        // Player schneller machen
+        // Pacman schneller machen
         this.speed = powerSpeed;
 
         // Alle Enemies in FRIGHTENED versetzen
-        for (Enemy enemy : game.getEnemies()) {
-            enemy.onPowerModeStart();
+        for (Geist geist : spiel.getEnemies()) {
+            geist.onPowerModeStart();
         }
     }
 
@@ -332,8 +332,8 @@ public class Player extends Creature implements KeyListener {
         this.speed = normalSpeed;
 
         // Alle Enemies aus FRIGHTENED zurückholen
-        for (Enemy enemy : game.getEnemies()) {
-            enemy.onPowerModeEnd();
+        for (Geist geist : spiel.getEnemies()) {
+            geist.onPowerModeEnd();
         }
     }
 
@@ -343,9 +343,9 @@ public class Player extends Creature implements KeyListener {
 
     @Override
     protected void tickPreferredDirection() {
-        // Deine bisherige Logik: Player stößt das Pathfinding der Enemies an
-        for (Enemy enemy : game.getEnemies()) {
-            enemy.tickPreferredDirection();
+        // Deine bisherige Logik: Pacman stößt das Pathfinding der Enemies an
+        for (Geist geist : spiel.getEnemies()) {
+            geist.tickPreferredDirection();
         }
     }
 
